@@ -41,7 +41,7 @@ const LandingPage = () => {
                 />
               ))}
             </div>
-            <span className="text-gray-400 text-lg">70,000+ Happy Students</span>
+            <span className="text-gray-400 text-lg">5,000+ Happy Students</span>
           </div>
         </div>
         {/* Right Side Feature Buttons */}
@@ -50,7 +50,7 @@ const LandingPage = () => {
             'Web Dev',
             'Quick Compiler',
             'Tutorials',
-            'Articles',
+            'App dev',
             'Dev Challenges',
             'Interview Experiences',
             'Mock Tests',
