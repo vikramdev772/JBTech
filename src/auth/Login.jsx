@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Google from "../icons/google.png"
 import Github from "../icons/github.png"
 
-const Signup = () => {
+const Login = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-black to-zinc-950 p-4">
       <motion.div
@@ -34,11 +34,6 @@ const Signup = () => {
         <p className="text-center text-gray-500 mb-4">OR Register/Login with email</p>
         
         <input
-          type="text"
-          placeholder="User Name"
-          className="w-full mb-4 p-3 bg-gray-800 text-white rounded-lg border border-gray-700 placeholder-gray-500"
-        />
-        <input
           type="email"
           placeholder="Enter your email"
           className="w-full mb-6 p-3 bg-gray-800 text-white rounded-lg border border-gray-700 placeholder-gray-500"
@@ -48,15 +43,15 @@ const Signup = () => {
           whileHover={{ scale: 1.05 }}
           className="w-full bg-purple-600 text-white p-3 rounded-lg"
         >
-          Register
+          Login
         </motion.button>
         
         <p className="text-center text-gray-500 mt-4">
-          Already have an account? <a href="#" className="text-purple-500">Login</a>
+          Don't have an account? <a href="#" className="text-purple-500">Register</a>
         </p>
       </motion.div>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
