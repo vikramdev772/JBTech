@@ -34,21 +34,18 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-4">
             {[
-              "Home",
-              "Courses",
-              "Explore",
-              "Contact",
-              "About",
-              "Tutorials",
+              { name: "Home", to: "/" },
+              { name: "Courses", to: "/courses" },
+              { name: "Explore", to: "/explore" },
+              { name: "Contact", to: "/contact" },
+              { name: "About", to: "/about" },
+              { name: "Tutorials", to: "/tutorials" },
             ].map((item) => (
-              <motion.a
-                key={item}
-                whileHover={{ scale: 1.1 }}
-                href="#"
-                className="text-gray-300 hover:text-white"
-              >
-                {item}
-              </motion.a>
+              <motion.div key={item.name} whileHover={{ scale: 1.1 }}>
+                <Link to={item.to} className="text-gray-300 hover:text-white">
+                  {item.name}
+                </Link>
+              </motion.div>
             ))}
             <Link to="/signup">
               <motion.button
@@ -88,20 +85,20 @@ const Navbar = () => {
         >
           <div className="flex flex-col space-y-4 p-4">
             {[
-              "Home",
-              "Courses",
-              "Explore",
-              "Contact",
-              "About",
-              "Tutorials",
+              { name: "Home", to: "/" },
+              { name: "Courses", to: "/courses" },
+              { name: "Explore", to: "/explore" },
+              { name: "Contact", to: "/contact" },
+              { name: "About", to: "/about" },
+              { name: "Tutorials", to: "/tutorials" },
             ].map((item) => (
-              <a
-                key={item}
-                href="#"
+              <Link
+                key={item.name}
+                to={item.to}
                 className="text-gray-300 hover:text-white text-lg"
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             ))}
             <Link to="/signup">
               <button className="bg-purple-500 text-white px-4 py-2 rounded-lg w-full">
