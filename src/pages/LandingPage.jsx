@@ -66,6 +66,9 @@ const LandingPage = () => {
           ))}
         </div>
       </div>
+      <div className="bg-gray-900">
+        <EmpowermentSection />
+      </div>
     </div>
   );
 };
