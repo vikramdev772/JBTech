@@ -6,6 +6,7 @@ import LandingPage from '../pages/LandingPage'
 import Footer from '../utils/Footer'
 import Signup from '../auth/Signup'
 import Login from '../auth/Login'
+import Courses from '../pages/Courses'
 
 const router = () => {
   return (
@@ -16,6 +17,7 @@ const router = () => {
     <Route path="/" element={<LandingPage />} />
     <Route path='/signup' element={<Signup/>}/>
     <Route path='/login' element={<Login/>}/>
+    <Route path='/courses' element={<Courses/>}/>
         
     </Routes>
     <Footer/>
