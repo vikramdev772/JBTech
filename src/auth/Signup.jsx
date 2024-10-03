@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Google from "../icons/google.png"
 import Github from "../icons/github.png"
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   return (
@@ -52,7 +53,7 @@ const Signup = () => {
         </motion.button>
         
         <p className="text-center text-gray-500 mt-4">
-          Already have an account? <a href="#" className="text-purple-500">Login</a>
+          Already have an account? <Link to="/login" className="text-purple-500">Login</Link>
         </p>
       </motion.div>
     </div>
