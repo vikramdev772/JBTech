@@ -8,6 +8,7 @@ import Signup from '../auth/Signup'
 import Login from '../auth/Login'
 import Courses from '../pages/Courses'
 import Explore from '../screens/Explore'
+import Contact from '../pages/Contact'
 
 const router = () => {
   return (
@@ -20,6 +21,7 @@ const router = () => {
     <Route path='/login' element={<Login/>}/>
     <Route path='/courses' element={<Courses/>}/>
     <Route path='/explore' element={<Explore/>}/>
+    <Route path='/contact' element={<Contact/>}/>
         
     </Routes>
     <Footer/>
