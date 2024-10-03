@@ -17,8 +17,8 @@ const Navbar = () => {
               whileTap={{ scale: 0.9 }}
               className="text-xl font-bold"
             >
-              <span className="text-blue-400">CODE</span>
-              <span className="text-purple-500">HELP</span>
+              <span className="text-blue-400">JB</span>
+              <span className="text-purple-500">Tech</span>
             </motion.div>
           </div>
           <div className="hidden md:flex items-center space-x-4">
@@ -58,7 +58,7 @@ const Navbar = () => {
               href="#"
               className="text-gray-300 hover:text-white"
             >
-              Articles
+              About
             </motion.a>
             <motion.a
               whileHover={{ scale: 1.1 }}
