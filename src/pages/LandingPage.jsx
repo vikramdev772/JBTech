@@ -1,4 +1,5 @@
 import React from 'react';
+import EmpowermentSection from '../components/EmpowermentSection';
 
 const LandingPage = () => {
   return (
