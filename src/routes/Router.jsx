@@ -9,6 +9,7 @@ import Login from '../auth/Login'
 import Courses from '../pages/Courses'
 import Explore from '../screens/Explore'
 import Contact from '../pages/Contact'
+import About from '../pages/About'
 
 const router = () => {
   return (
@@ -22,6 +23,7 @@ const router = () => {
     <Route path='/courses' element={<Courses/>}/>
     <Route path='/explore' element={<Explore/>}/>
     <Route path='/contact' element={<Contact/>}/>
+    <Route path='/about' element={<About/>}/>
         
     </Routes>
     <Footer/>
