@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Fs from "../images/FS.png"; // Correctly importing the image
+import Js from "../images/Js.png";
 
 const Courses = () => {
   const courses = [
@@ -19,7 +20,7 @@ const Courses = () => {
       price: '₹21999',
       originalPrice: '₹28000',
       discount: '57% off',
-      imgSrc: 'path/to/image2.png',
+      imgSrc: Js,
     },
     {
       id: 3,
