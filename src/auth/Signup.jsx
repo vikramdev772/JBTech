@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Google from "../icons/google.png"
-import Github from "../icons/github.png"
-import { Link } from 'react-router-dom';
+import Google from "../icons/google.png";
+import Github from "../icons/github.png";
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleRegister = () => {
+    // Navigate to RegisterDetails component with username and email
+    navigate('/register-details', { state: { username, email } });
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-black to-zinc-950 p-4">
       <motion.div
@@ -38,15 +47,20 @@ const Signup = () => {
           type="text"
           placeholder="User Name"
           className="w-full mb-4 p-3 bg-gray-800 text-white rounded-lg border border-gray-700 placeholder-gray-500"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="email"
           placeholder="Enter your email"
           className="w-full mb-6 p-3 bg-gray-800 text-white rounded-lg border border-gray-700 placeholder-gray-500"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         
         <motion.button
           whileHover={{ scale: 1.05 }}
+          onClick={handleRegister} // Navigate to RegisterDetails on click
           className="w-full bg-purple-600 text-white p-3 rounded-lg"
         >
           Register
