@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import LoginModal from './LoginModal'
 import PasswordModal from './PasswordModal';
 import OtpModal from './OtpModal';
 import RecoverPasswordModal from './RecoverPasswordModal';
