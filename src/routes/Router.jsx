@@ -10,6 +10,7 @@ import Explore from "../screens/Explore";
 import Contact from "../pages/Contact";
 import About from "../pages/About";
 import ProfessionalLogin from "../auth/ProfessionalLogin";
+import RegisterDetails from "../auth/RegisterDetails";
 
 const router = () => {
   return (
@@ -26,6 +27,8 @@ const router = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/professional-login" element={<ProfessionalLogin />} />
+          <Route path="/register-details" element={<RegisterDetails />} />
+          
         </Routes>
         <Footer />
       </BrowserRouter>
