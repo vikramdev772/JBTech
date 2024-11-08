@@ -1,9 +1,9 @@
 import  { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
 import { User, Mail, Phone, Calendar, School, MapPin, LockKeyhole } from 'lucide-react';
 import axios from 'axios';
 import authURL from '../api/authapi';
