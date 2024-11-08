@@ -1,74 +1,161 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Play, Star, Users, ChevronRight, Code, Brain, BookOpen, Terminal, Sparkles } from 'lucide-react';
 import EmpowermentSection from '../components/EmpowermentSection';
 
+const GlassCard = ({ children, className = '' }) => (
+  <div className={`backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-xl ${className}`}>
+    {children}
+  </div>
+);
+
+const FeatureButton = ({ icon: Icon, text }) => (
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="group relative backdrop-blur-lg bg-white/5 px-4 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium rounded-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/10 transition-all overflow-hidden"
+  >
+    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="relative flex items-center space-x-2">
+      <Icon className="w-5 h-5 text-purple-400" />
+      <span className="text-gray-200 group-hover:text-white">{text}</span>
+    </div>
+  </motion.button>
+);
+
 const LandingPage = () => {
+  const features = [
+    { icon: Code, text: 'Web Dev' },
+    { icon: Terminal, text: 'App Dev' },
+    { icon: BookOpen, text: 'JAVA FS' },
+    { icon: Brain, text: 'MERN' },
+    { icon: Terminal, text: 'Dev Challenges' },
+    { icon: Users, text: 'Interview Prep' },
+    { icon: Brain, text: 'Mock Tests' },
+    { icon: BookOpen, text: 'Core CS' }
+  ];
+
   return (
-    <div className="bg-black text-white min-h-screen">
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto py-20 px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Side Content */}
-        <div className="flex flex-col justify-center">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-            Crack the Code to Success with <span className="text-purple-500">JBTech</span>
-          </h1>
-          <p className="text-gray-400 mb-8 text-base sm:text-lg">
-            Master your programming skills, solve challenges, and unlock the vast world of coding opportunities.
-          </p>
-          {/* Call to Action Buttons */}
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-            <button
-              className="bg-purple-600 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:bg-purple-700 transition-all"
-              aria-label="View Courses"
+    <div className="min-h-screen bg-gradient-to-b from-black via-purple-900/20 to-black text-white overflow-hidden">
+      {/* Animated Background Orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 -left-20 w-96 h-96 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob" />
+        <div className="absolute top-0 -right-20 w-96 h-96 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000" />
+      </div>
+
+      <div className="relative">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto py-20 px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Left Side Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col justify-center"
             >
-              View Courses
-            </button>
-            <button
-              className="bg-transparent border border-pink-500 text-pink-500 px-6 py-3 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:bg-pink-500 hover:text-white transition-all flex items-center justify-center"
-              aria-label="Watch Live Video"
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="inline-flex items-center px-4 py-2 mb-6 rounded-full backdrop-blur-lg bg-white/5 border border-white/10 w-fit"
+              >
+                <Star className="w-4 h-4 text-yellow-400 mr-2" />
+                <span className="text-white/80">Trusted by 5000+ Students</span>
+              </motion.div>
+
+              <GlassCard className="p-8 mb-8">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                  Crack the Code to Success with{' '}
+                  <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text">
+                    JBTech
+                  </span>
+                </h1>
+
+                <p className="text-white/70 text-lg mb-8">
+                  Master your programming skills, solve real-world challenges, and unlock endless opportunities in the world of coding.
+                </p>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center group"
+                  >
+                    Get Started Now
+                    <Sparkles className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group px-8 py-4 rounded-full backdrop-blur-md bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center"
+                  >
+                    <Play className="w-5 h-5 mr-2 text-red-500" />
+                    Watch Demo
+                    <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
+                </div>
+              </GlassCard>
+
+              {/* Social Proof */}
+              <GlassCard className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex -space-x-3">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.img
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        key={i}
+                        src={`https://api.dicebear.com/6.x/avataaars/svg?seed=${i}`}
+                        alt={`student-${i + 1}`}
+                        className="w-12 h-12 rounded-full border-2 border-black/50 backdrop-blur-sm"
+                      />
+                    ))}
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                      5,000+
+                    </span>
+                    <span className="text-white/70">Active Learners</span>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+
+            {/* Right Side Features Grid */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              Watch Video <span className="text-red-500 ml-2">Live</span> &rarr;
-            </button>
+              <GlassCard className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {features.map((feature, index) => (
+                    <motion.div
+                      key={feature.text}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <FeatureButton icon={feature.icon} text={feature.text} />
+                    </motion.div>
+                  ))}
+                </div>
+              </GlassCard>
+            </motion.div>
           </div>
-          {/* Student Count */}
-          <div className="flex items-center space-x-4">
-            <div className="flex -space-x-2">
-              {/* Dynamic placeholder for student avatars */}
-              {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src={`https://via.placeholder.com/40?text=${i + 1}`}
-                  alt={`student-${i + 1}`}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-black"
-                />
-              ))}
-            </div>
-            <span className="text-gray-400 text-sm sm:text-lg">5,000+ Happy Students</span>
-          </div>
-        </div>
-        {/* Right Side Feature Buttons */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-6">
-          {[
-            'Web Dev',
-            'App Dev',
-            'JAVA FS',
-            'MERN',
-            'Dev Challenges',
-            'Interview Experiences',
-            'Mock Tests',
-            'Core CS Subjects'
-          ].map((item) => (
-            <button
-              key={item}
-              className="bg-gray-900 border border-gray-700 px-4 py-3 sm:px-6 sm:py-4 text-sm sm:text-lg font-medium rounded-xl hover:bg-gray-800 hover:border-gray-600 transition-all transform hover:scale-105"
-              aria-label={item}
-            >
-              {item}
-            </button>
-          ))}
         </div>
       </div>
-      <div className="bg-gray-900">
-        <EmpowermentSection />
+
+      {/* Empowerment Section */}
+      <div className="relative">
+        <GlassCard className="bg-black/30">
+          <EmpowermentSection />
+        </GlassCard>
       </div>
     </div>
   );
