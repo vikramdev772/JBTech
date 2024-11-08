@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Input } from '../components/ui/Input';
-import { Button } from '../components/ui/button';
+import { Button } from '../components/ui/Button';
 import { LockKeyhole, Mail, ArrowLeft } from 'lucide-react';
 
 const Login = ({ onLogin }) => {
