@@ -16,7 +16,6 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import "../../styles/Sidebar.css";
 
 const MenuItem = ({ icon: Icon, label, to, isActive, isOpen, tooltipId }) => (
   <motion.div
@@ -27,6 +26,7 @@ const MenuItem = ({ icon: Icon, label, to, isActive, isOpen, tooltipId }) => (
       to={to}
       data-tooltip-id={tooltipId}
       data-tooltip-content={!isOpen ? label : ""}
+      className="block" // Added for better touch targets
     >
       <div className={`
         relative group flex items-center gap-3 px-4 py-3 rounded-lg
@@ -83,7 +83,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { label: "Data", to: "/data", icon: Database }
   ];
 
-  // Mobile overlay backdrop
+  // Mobile overlay backdrop with touch event handling
   const Backdrop = ({ onClick }) => (
     <motion.div
       initial={{ opacity: 0 }}
@@ -91,8 +91,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       exit={{ opacity: 0 }}
       onClick={onClick}
       className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+      style={{ touchAction: 'none' }} // Prevent scroll-through on mobile
     />
   );
+
+  // Handle mobile swipe gesture
+  const handleSwipeClose = (event, info) => {
+    if (info.offset.x < -50 && isOpen) {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <>
@@ -101,43 +109,46 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </AnimatePresence>
 
       <motion.aside
-        initial={{ width: isOpen ? "280px" : "88px", x: 0 }}
-        animate={{ 
-          width: isOpen ? "280px" : "88px",
-          x: 0 
-        }}
+        initial={{ x: isOpen ? 0 : -280 }}
+        animate={{ x: isOpen ? 0 : -280 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2}
+        onDragEnd={handleSwipeClose}
         className={`
-          fixed left-0 h-screen
+          fixed left-0 h-screen w-[280px]
           backdrop-blur-md bg-black/30
           border-r border-white/10
           flex flex-col
           overflow-hidden z-50
           md:relative
-          ${!isOpen && 'md:hover:width-280'}
+          touch-none
+          ${!isOpen && 'md:hover:w-[280px]'}
         `}
       >
         {/* Header */}
         <div className="p-4 border-b border-white/10">
           <div className="flex items-center justify-between">
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
-              >
-                EduTech Pro
-              </motion.div>
-            )}
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+                >
+                  EduTech Pro
+                </motion.div>
+              )}
+            </AnimatePresence>
             
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
             >
               {isOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </motion.button>
+            </button>
           </div>
         </div>
 
@@ -174,28 +185,30 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           />
         </div>
 
-        {/* Tooltips */}
-        {!isOpen && menuItems.map((item, index) => (
+        {/* Tooltips - Only shown on desktop */}
+        <div className="hidden md:block">
+          {!isOpen && menuItems.map((item, index) => (
+            <Tooltip
+              key={index}
+              id={`sidebar-tooltip-${index}`}
+              place="right"
+              effect="solid"
+              className="z-[60] !bg-gray-800 !text-white px-3 py-2 rounded-lg shadow-lg border border-white/10"
+            />
+          ))}
           <Tooltip
-            key={index}
-            id={`sidebar-tooltip-${index}`}
+            id="settings-tooltip"
             place="right"
             effect="solid"
             className="z-[60] !bg-gray-800 !text-white px-3 py-2 rounded-lg shadow-lg border border-white/10"
           />
-        ))}
-        <Tooltip
-          id="settings-tooltip"
-          place="right"
-          effect="solid"
-          className="z-[60] !bg-gray-800 !text-white px-3 py-2 rounded-lg shadow-lg border border-white/10"
-        />
-        <Tooltip
-          id="logout-tooltip"
-          place="right"
-          effect="solid"
-          className="z-[60] !bg-gray-800 !text-white px-3 py-2 rounded-lg shadow-lg border border-white/10"
-        />
+          <Tooltip
+            id="logout-tooltip"
+            place="right"
+            effect="solid"
+            className="z-[60] !bg-gray-800 !text-white px-3 py-2 rounded-lg shadow-lg border border-white/10"
+          />
+        </div>
       </motion.aside>
     </>
   );

@@ -16,7 +16,7 @@ const Main = () => {
 
   return (
     <Router>
-      <div className="flex h-screen relative mt-[100px]">
+      <div className="flex h-screen relative ">
         {/* Sidebar */}
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
