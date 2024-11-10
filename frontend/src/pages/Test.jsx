@@ -12,7 +12,7 @@ import {
   Save,
   RefreshCw
 } from 'lucide-react';
-import questionsData from '../components/text.json';
+import questionsData from './text.json';
 
 const QuizProgress = ({ current, total, answeredQuestions }) => {
   const progress = (answeredQuestions.length / total) * 100;

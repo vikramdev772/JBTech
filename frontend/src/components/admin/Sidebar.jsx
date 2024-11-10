@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import "../styles/Sidebar.css";
+import "../../styles/Sidebar.css";
 
 const MenuItem = ({ icon: Icon, label, to, isActive, isOpen, tooltipId }) => (
   <motion.div

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import test from './text.json';
+import test from '../../pages/text.json';
 import { BookOpen, Clock, CheckCircle, XCircle, Award } from 'lucide-react';
 
 const Assessment = () => {

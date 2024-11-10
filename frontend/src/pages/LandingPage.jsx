@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Star, Users, ChevronRight, Code, Brain, BookOpen, Terminal, Sparkles } from 'lucide-react';
-import EmpowermentSection from '../components/EmpowermentSection';
+import EmpowermentSection from './EmpowermentSection';
 
 const GlassCard = ({ children, className = '' }) => (
   <div className={`backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-xl ${className}`}>

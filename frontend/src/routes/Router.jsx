@@ -13,7 +13,8 @@ import About from "../pages/About";
 import ProfessionalLogin from "../auth/ProfessionalLogin";
 import Test from "../pages/Test";
 import Main from "../pages/Main";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/admin/Sidebar";
+import Dashboard from "../screens/Dashboard";
 
 const Router = ({ onLogin }) => {
   // Receive onLogin as a prop
@@ -31,9 +32,11 @@ const Router = ({ onLogin }) => {
         <Route path="/about" element={<About />} />
         {/* <Route path="/professional-login" element={<ProfessionalLogin />} /> */}
         <Route path="/tutorials" element={<Test />} />
+        <Route path="/main" element={<Dashboard />} />
         {/* Main */}
         {/* <Route path="/main" element={<Main />} /> */}
         {/* <Route path="/main" element={<Sidebar />} /> */}
+        
 
 
       </Routes>

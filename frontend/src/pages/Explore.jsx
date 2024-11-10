@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import screenfull from "screenfull";
 import {
   Play,
   Code,
-  Terminal,
   Copy,
   Download,
-  Trash2,
-  Settings,
-  Maximize2,
+  Fullscreen,
+  X as ExitFullscreen,
   Save,
-  RefreshCw,
 } from "lucide-react";
 import MonacoEditor from "@monaco-editor/react";
+
+// API configuration
+const API_CONFIG = {
+  baseURL: 'https://judge0-ce.p.rapidapi.com',
+  headers: {
+    'X-RapidAPI-Key': 'b9e140a6camsh2ba37e668a9dfbep1f407bjsn27de22535a1e',
+    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+    'Content-Type': 'application/json'
+  }
+};
 
 const IconButton = ({ icon: Icon, label, onClick, variant = "default" }) => (
   <motion.button
@@ -36,19 +44,20 @@ const IconButton = ({ icon: Icon, label, onClick, variant = "default" }) => (
 );
 
 const Explore = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState("C++");
+  const [selectedLanguage, setSelectedLanguage] = useState("Python");
   const [codeSnippet, setCodeSnippet] = useState(
-    `#include <iostream>\nusing namespace std;\n\nint main() {\n  cout << "Hello world!" << endl;\n  return 0;\n}`
+    `print("Hello world!")\na=5\nprint("\\n\\t a : ",a)`
   );
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("Ready to execute...");
   const [isRunning, setIsRunning] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const editorRef = useRef(null);
 
-  // Define the languageOptions object here
   const languageOptions = {
     "C++": `#include <iostream>\nusing namespace std;\n\nint main() {\n  cout << "Hello world!" << endl;\n  return 0;\n}`,
-    Python: `print("Hello world!")`,
-    JavaScript: `console.log("Hello world!");`,
+    Python: `print("Hello world!")\na=5\nprint("\\n\\t a : ",a)`,
+    JavaScript: `console.log("Hello world!");\nlet a = 5;\nconsole.log("\\n\\t a : ", a);`,
     Java: `public class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello world!");\n  }\n}`,
   };
 
@@ -72,58 +81,82 @@ const Explore = () => {
     setCodeSnippet(languageOptions[lang]);
   };
 
+  // Function to format the output properly
+  const formatOutput = (output) => {
+    if (!output) return "";
+    
+    // Replace escaped newlines and tabs with actual newlines and tabs
+    return output
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      // Remove any extra quotes that might be wrapping the output
+      .replace(/^"(.*)"$/s, '$1')
+      // Remove any escaped quotes
+      .replace(/\\"/g, '"');
+  };
+
   const handleRunCode = async () => {
     setIsRunning(true);
     setOutput("Running...");
 
     try {
-      const response = await axios.post(
-        "https://judge0-ce.p.rapidapi.com/submissions",
+      // Create submission
+      const submissionResponse = await axios.post(
+        `${API_CONFIG.baseURL}/submissions`,
         {
           source_code: codeSnippet,
           language_id: languageIds[selectedLanguage],
           stdin: input,
         },
-        {
-          headers: {
-            "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-            "x-rapidapi-key":
-              "YOUR_RAPIDAPI_KEY", // Replace with your actual RapidAPI key
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: API_CONFIG.headers }
       );
 
-      const { token } = response.data;
+      const { token } = submissionResponse.data;
 
-      // Poll the API to get the result
-      const checkStatus = async () => {
-        const result = await axios.get(
-          `https://judge0-ce.p.rapidapi.com/submissions/${token}`,
-          {
-            headers: {
-              "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-              "x-rapidapi-key":
-                "YOUR_RAPIDAPI_KEY", // Replace with your actual RapidAPI key
-            },
+      // Poll for results
+      const getResult = async () => {
+        try {
+          const response = await axios.get(
+            `${API_CONFIG.baseURL}/submissions/${token}`,
+            { headers: API_CONFIG.headers }
+          );
+
+          const { status, stdout, stderr, compile_output } = response.data;
+
+          if (status?.id <= 2) {
+            // Still processing
+            setTimeout(getResult, 1000);
+            return;
           }
-        );
-        if (result.data.status.id <= 2) {
-          setTimeout(checkStatus, 1000); // Retry if still processing
-        } else {
-          setOutput(result.data.stdout || result.data.stderr || "No output");
+
+          // Handle different types of output
+          if (stderr) {
+            setOutput(`Error: ${formatOutput(stderr)}`);
+          } else if (compile_output) {
+            setOutput(`Compilation Error: ${formatOutput(compile_output)}`);
+          } else if (stdout) {
+            setOutput(formatOutput(stdout));
+          } else {
+            setOutput("Program executed with no output");
+          }
+
+          setIsRunning(false);
+        } catch (error) {
+          console.error("Error checking submission:", error);
+          setOutput(`Error checking submission: ${error.message}`);
           setIsRunning(false);
         }
       };
 
-      checkStatus();
+      // Start polling
+      await getResult();
     } catch (error) {
-      setOutput("Error occurred while executing code");
+      console.error("Error submitting code:", error);
+      setOutput(`Error submitting code: ${error.message}`);
       setIsRunning(false);
     }
   };
 
-  // Handle code download
   const handleDownloadCode = () => {
     const extensions = {
       "C++": "cpp",
@@ -143,10 +176,16 @@ const Explore = () => {
     document.body.removeChild(link);
   };
 
+  const toggleFullscreen = () => {
+    if (screenfull.isEnabled && editorRef.current) {
+      screenfull.toggle(editorRef.current);
+      setIsFullscreen(!isFullscreen);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-purple-900/10 to-black py-12">
+    <div ref={editorRef} className={`min-h-screen ${isFullscreen ? "fullscreen" : ""} bg-gradient-to-b from-black via-purple-900/10 to-black py-12`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center space-y-4 mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -170,16 +209,9 @@ const Explore = () => {
           </motion.h1>
         </div>
 
-        {/* Main Editor Section */}
         <div className="rounded-2xl backdrop-blur-lg bg-black/30 border border-white/10 overflow-hidden">
-          {/* Toolbar */}
           <div className="p-4 border-b border-white/10 flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-4">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-              </div>
               <select
                 value={selectedLanguage}
                 onChange={handleLanguageChange}
@@ -199,30 +231,20 @@ const Explore = () => {
                 icon={Download}
                 label="Download"
                 variant="primary"
-                onClick={handleDownloadCode} // Add this line
+                onClick={handleDownloadCode}
               />
-              <IconButton icon={Settings} label="Settings" variant="primary" />
-              <IconButton icon={Maximize2} label="Fullscreen" variant="primary" />
+              <IconButton
+                icon={isFullscreen ? ExitFullscreen : Fullscreen}
+                label="Fullscreen"
+                variant="primary"
+                onClick={toggleFullscreen}
+              />
             </div>
           </div>
 
-          {/* Editor Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
-            {/* Code Input using Monaco Editor */}
             <div className="lg:col-span-2 space-y-4">
               <div className="rounded-lg backdrop-blur-sm bg-white/5 border border-white/10 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-purple-400 font-semibold flex items-center">
-                    <Code className="w-4 h-4 mr-2" />
-                    Source Code
-                  </h2>
-                  <IconButton
-                    icon={RefreshCw}
-                    label="Reset"
-                    variant="danger"
-                    onClick={() => setCodeSnippet(languageOptions[selectedLanguage])}
-                  />
-                </div>
                 <MonacoEditor
                   height="400px"
                   language={monacoLanguages[selectedLanguage]}
@@ -238,22 +260,8 @@ const Explore = () => {
               </div>
             </div>
 
-            {/* Input/Output Section */}
             <div className="space-y-4">
-              {/* Input */}
               <div className="rounded-lg backdrop-blur-sm bg-white/5 border border-white/10 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-blue-400 font-semibold flex items-center">
-                    <Terminal className="w-4 h-4 mr-2" />
-                    Input (STDIN)
-                  </h2>
-                  <IconButton
-                    icon={Trash2}
-                    label="Clear"
-                    variant="danger"
-                    onClick={() => setInput("")}
-                  />
-                </div>
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -262,18 +270,12 @@ const Explore = () => {
                 />
               </div>
 
-              {/* Output */}
               <div className="rounded-lg backdrop-blur-sm bg-white/5 border border-white/10 p-4">
-                <h2 className="text-green-400 font-semibold mb-4 flex items-center">
-                  <Terminal className="w-4 h-4 mr-2" />
-                  Output (STDOUT)
-                </h2>
-                <div className="w-full h-32 bg-black/30 text-gray-400 p-4 rounded-lg border border-white/10 font-mono text-sm">
+                <pre className="w-full h-32 bg-black/30 text-gray-400 p-4 rounded-lg border border-white/10 font-mono text-sm overflow-auto whitespace-pre-wrap">
                   {output}
-                </div>
+                </pre>
               </div>
 
-              {/* Run Button */}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -300,4 +302,5 @@ const Explore = () => {
     </div>
   );
 };
+
 export default Explore;

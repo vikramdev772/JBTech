@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/admin/Sidebar";
+import Header from "../components/admin/Header";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 
 // Import your components
-import Home from "../components/Home";
-import Assessment from "../components/Assessment";
-import Editor from "../components/Editor";
+import Home from "../components/admin/Home";
+import Assessment from "../components/admin/Assessment";
+import Editor from "../components/admin/Editor";
 import Data from "../db/Data";
 
 
@@ -23,7 +23,7 @@ const Main = () => {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <Header />
+          {/* <Header /> */}
 
           {/* Page Content */}
           <div className="flex-grow p-6 bg-black">
